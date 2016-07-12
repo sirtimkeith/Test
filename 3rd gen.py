@@ -1,20 +1,29 @@
 import sys
 import os
-from xlrd import open_workbook
-import pandas as pd
+import xlrd
+from openpyxl import load_workbook
 
 dataList = []
 EXTENSION = (".xls")
 #concatenation
 def cat_man():
-    book = open_workbook(dataList)
-    sheet = book.sheet_by_index(3)
-    keys = [sheet.cell(0, col_index).value for col_index in xrange(sheet.ncols)]
-
-    dict_list = []
-    for row_index in xrange(1, sheet.nrows):
-        d = {keys[col_index]: sheet.cell(row_index, col_index).value
-             for col_index in xrange(sheet.ncols)}
+    catstring = ','.join(dataList)
+    for f in catstring:
+        wb = load_workbook(catstring)
+        sheet = wb.get_sheet_by_name('Sheet1')
+    '''
+    try:
+        for f in dataList:
+            book = open_workbook(dataList,'r+')
+            sheet = book.sheet_by_index(3)
+            keys = [sheet.cell(0, col_index).value for col_index in xrange(sheet.ncols)]
+            test_list = []
+            for row_index in xrange(1, sheet.nrows):
+                d = {keys[col_index]: sheet.cell(row_index, col_index).value
+                     for col_index in xrange(sheet.ncols)}
+                test_list.append(d)
+        print (test_List)
+        '''
     
 #locating the files
 def loc_man():
@@ -25,6 +34,7 @@ def loc_man():
                 f = open(user_files,'r+')
                 dataList.append(user_files)
                 print("Found the file, adding it")
+                f.close()
             elif user_files == '':
                 print (dataList)
                 continue_user = input("This is your file-list, press c to continue or b to add more files ")
@@ -40,3 +50,4 @@ def loc_man():
             loc_man()
 
 loc_man()
+cat_man()
